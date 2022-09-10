@@ -15,3 +15,17 @@ A aplicação deve possuir um botão para que o usuário possa criar um cliente 
     • Id = identificador do cliente (número ou nome).
     • Ta = tempo de atendimento (tempo que o cliente fica sendo atendido por um caixa). A interface deverá mostrar que o cliente e o caixa estão executando durante todo este tempo.
     • Senha
+
+## Saídas:
+
+A interface deverá atender aos seguintes requisitos:
+    • Mostrar os dados de cada caixa:
+        ▪ Identificador;
+        ▪ Status (atendendo o cliente Y ou dormindo).
+
+    • Mostrar os dados de cada cliente:
+        ▪ Identificador;
+        ▪ Tempo de atendimento;
+        ▪ Status (dormindo na fila, em atendimento pelo caixa X ou já foi atendido).
+
+    • Mostrar um log com os principais eventos de cada processo.
