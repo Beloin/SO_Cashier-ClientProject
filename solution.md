@@ -2,11 +2,12 @@
 
 For this solution we will be getting expertise from the classic Barber Problem.
 
-Semaphore clientQueueMutex = 1;
-Semaphore clients = 0;
-Semaphore cashiers = N;
+Semaphore clientQueueMutex = 1;  
+Semaphore clients = 0;  
+Semaphore cashiers = N;  
 
 Cashier Thread:
+```
 run() {
     Client currentClient;
     int atTime;
@@ -27,10 +28,11 @@ run() {
         doWork(atTime);
     }
 
-
 }
 
+```
 Client Thread:
+```
 run() {
     goToQueue();
     down(clientQueueMutex);
@@ -47,4 +49,4 @@ run() {
     doWork();
     goToHome()
 }
-
+```
