@@ -28,4 +28,4 @@ A interface deverá atender aos seguintes requisitos:
         ▪ Tempo de atendimento;
         ▪ Status (dormindo na fila, em atendimento pelo caixa X ou já foi atendido).
 
-    • Mostrar um log com os principais eventos de cada processo.
+    • Mostrar um log com os principais eventos de cad processo.
