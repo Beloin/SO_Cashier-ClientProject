@@ -1,17 +1,27 @@
 package com.beloin.so_cashierclientproject.models;
 
 import com.beloin.so_cashierclientproject.models.plain.Position;
+import com.beloin.so_cashierclientproject.physics.HorizontalWalkPhysics;
+import com.beloin.so_cashierclientproject.physics.WalkPhysics;
 
 import java.util.concurrent.Semaphore;
 
 public class ClientThread extends Thread implements Client {
-    public ClientThread(int clientId, Semaphore publicClientsSemaphore, Semaphore publicCashierSemaphore, ConcurrentClientQueue queue, int attendmentSeconds) {
+    public ClientThread(
+            int clientId,
+            Semaphore publicClientsSemaphore,
+            Semaphore publicCashierSemaphore,
+            ConcurrentClientQueue queue,
+            int attendmentSeconds
+    ) {
         this.clientId = clientId;
         this.publicClientsSemaphore = publicClientsSemaphore;
         this.publicCashierSemaphore = publicCashierSemaphore;
         this.queue = queue;
         this.attendantSeconds = attendmentSeconds;
         this.ownSemaphore = new Semaphore(0);
+        position = new Position(0, 0);
+        walkPhysics = HorizontalWalkPhysics.DefaultFactory();
     }
 
     private Cashier cashier;
@@ -24,6 +34,7 @@ public class ClientThread extends Thread implements Client {
 
     // TODO: How to Make Position?
     private final Position position;
+    private final WalkPhysics walkPhysics;
     private final int attendantSeconds;
 
     @Override
@@ -47,6 +58,7 @@ public class ClientThread extends Thread implements Client {
 
     @Override
     public void run() {
+        // TODO: GO TO QUEUE?
         this.queue.add(this);
         publicClientsSemaphore.release();
 
@@ -64,7 +76,6 @@ public class ClientThread extends Thread implements Client {
     }
 
     private void goToCashier() {
-        Position cashierPosition = this.cashier.getPosition();
-
+        walkPhysics.walk(position, cashier.getPosition());
     }
 }
