@@ -35,7 +35,6 @@ public class ClientThread extends Thread implements Client {
     private final Semaphore publicCashierSemaphore;
     private final ConcurrentClientQueue queue;
 
-    // TODO: How to Make Position?
     private final Position position;
     private final Position queuePosition;
     private final WalkPhysics walkPhysics;
