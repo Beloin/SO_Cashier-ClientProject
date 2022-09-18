@@ -29,7 +29,6 @@ public class HorizontalWalkPhysics implements WalkPhysics {
         // In our ~game~ everyone will walk only in horizontal or vertical.
         // We arbitrarily start by the vertical
         System.out.println("Walking... " + from + " -> " + to);
-        // TODO: BUG: This only works if `to` bigger then `from`
         float blocksPerTime = walkSpeed / blockSize;
 
         float verticalStart = from.getY();

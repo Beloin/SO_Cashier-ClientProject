@@ -62,8 +62,8 @@ public class ClientThread extends Thread implements Client {
 
     @Override
     public void run() {
-        goToQueue();
         this.queue.add(this);
+        goToQueue();
         publicClientsSemaphore.release();
 
         do {

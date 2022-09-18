@@ -32,4 +32,26 @@ public class Position {
                 ", y=" + y +
                 '}';
     }
+
+    public Position appendX(float x) {
+        this.x += x;
+        return this;
+    }
+
+    public Position appendY(float y) {
+        this.y += y;
+        return this;
+    }
+
+    public Position subtractX(float x) {
+        return appendX(-x);
+    }
+
+    public Position subtractY(float y) {
+        return appendY(-y);
+    }
+
+    public static Position of(Position p) {
+        return new Position(p.getX(), p.getY());
+    }
 }

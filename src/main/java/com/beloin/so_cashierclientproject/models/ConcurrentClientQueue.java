@@ -18,4 +18,8 @@ public class ConcurrentClientQueue {
     public void add(Client c) {
         clients.add(c);
     }
+
+    public int getSize() {
+        return clients.size();
+    }
 }
