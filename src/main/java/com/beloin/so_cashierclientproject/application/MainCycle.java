@@ -16,14 +16,17 @@ public class MainCycle extends Thread {
 
     @Override
     public void run() {
-        try {
-            while (true) {
+        while (true) {
+            try {
+                // TODO: This generates problem:
+                // TODO: Trying to access positionedList while is being used
                 Thread.sleep(minimumWorldTime);
                 updatePositionedItems();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
+
     }
 
     private void updatePositionedItems() {

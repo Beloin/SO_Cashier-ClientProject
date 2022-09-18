@@ -82,6 +82,7 @@ public class ClientThread extends Thread implements Client {
     }
 
     private void exitCashier() {
+        walkPhysics.walk(position, position.subtractX(25));
         walkPhysics.walk(position, new Position(500, 500));
     }
 
