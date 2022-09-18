@@ -4,12 +4,14 @@ public class GlobalConfiguration {
     /**
      * Human speed in m/s
      */
-    public final static float speed =  1;
+    public final static float speed =  5;
 
     /**
      * Time in MS
      */
-    public static final int worldTime = 1000;
+    public static final int worldTime = 200;
+
+    public static final int minimumWorldTime = 10;
 
     /**
      * Block size in meter

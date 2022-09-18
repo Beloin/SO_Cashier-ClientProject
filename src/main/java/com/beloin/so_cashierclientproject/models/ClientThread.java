@@ -9,6 +9,8 @@ import java.util.concurrent.Semaphore;
 public class ClientThread extends Thread implements Client {
     public ClientThread(
             int clientId,
+            Position initialPosition,
+            Position queuePosition,
             Semaphore publicClientsSemaphore,
             Semaphore publicCashierSemaphore,
             ConcurrentClientQueue queue,
@@ -20,7 +22,8 @@ public class ClientThread extends Thread implements Client {
         this.queue = queue;
         this.attendantSeconds = attendmentSeconds;
         this.ownSemaphore = new Semaphore(0);
-        position = new Position(0, 0);
+        position = initialPosition;
+        this.queuePosition = queuePosition;
         walkPhysics = HorizontalWalkPhysics.DefaultFactory();
     }
 
@@ -34,6 +37,7 @@ public class ClientThread extends Thread implements Client {
 
     // TODO: How to Make Position?
     private final Position position;
+    private final Position queuePosition;
     private final WalkPhysics walkPhysics;
     private final int attendantSeconds;
 
@@ -59,6 +63,7 @@ public class ClientThread extends Thread implements Client {
     @Override
     public void run() {
         // TODO: GO TO QUEUE?
+        goToQueue();
         this.queue.add(this);
         publicClientsSemaphore.release();
 
@@ -71,11 +76,19 @@ public class ClientThread extends Thread implements Client {
         doWork();
     }
 
+    private void goToQueue() {
+        walkPhysics.walk(position, queuePosition);
+    }
+
     private void doWork() {
         int waitFor = attendantSeconds;
     }
 
     private void goToCashier() {
         walkPhysics.walk(position, cashier.getPosition());
+    }
+
+    public Position getPosition() {
+        return position;
     }
 }

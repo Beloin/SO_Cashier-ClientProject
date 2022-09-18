@@ -4,7 +4,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ConcurrentClientQueue {
-    ConcurrentClientQueue() {
+    public ConcurrentClientQueue() {
         this.clients = new ConcurrentLinkedQueue<>();
     }
 

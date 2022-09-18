@@ -19,7 +19,7 @@ public class HorizontalWalkPhysics implements WalkPhysics {
     private final int worldTime;
 
     /**
-     * Synchronous method, updates second per second
+     * Synchronous method, updates `worldTime` per `worldTime`
      *
      * @param from Start Position
      * @param to   End position
@@ -28,13 +28,15 @@ public class HorizontalWalkPhysics implements WalkPhysics {
     public void walk(Position from, Position to) {
         // In our ~game~ everyone will walk only in horizontal or vertical.
         // We arbitrarily start by the vertical
-
+        System.out.println("Walking... " + from + " -> " + to);
         float verticalStart = from.getY();
         float verticalEnd = to.getY();
+        float blocksWalked = walkSpeed / blockSize;
 
         float currentVerticalPosition = verticalStart;
         while (currentVerticalPosition <= verticalEnd) {
-            currentVerticalPosition += walkSpeed / blockSize;
+            from.setY(from.getY() + blocksWalked);
+            currentVerticalPosition += blocksWalked;
             try {
                 Thread.sleep(worldTime);
             } catch (InterruptedException e) {
@@ -46,12 +48,15 @@ public class HorizontalWalkPhysics implements WalkPhysics {
         float horizontalEnd = to.getX();
         float currentHorizontalPosition = horizontalStart;
         while (currentHorizontalPosition <= horizontalEnd) {
-            currentHorizontalPosition += walkSpeed / blockSize;
+            from.setX(from.getX() + blocksWalked);
+            currentHorizontalPosition += blocksWalked;
             try {
                 Thread.sleep(worldTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
+        System.out.println("Finished Walking... " + from + " -> " + to);
     }
 }
