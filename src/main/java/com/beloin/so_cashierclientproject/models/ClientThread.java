@@ -66,13 +66,24 @@ public class ClientThread extends Thread implements Client {
         this.queue.add(this);
         publicClientsSemaphore.release();
 
-        do publicCashierSemaphore.acquireUninterruptibly();
+        do {
+            publicCashierSemaphore.acquireUninterruptibly();
+            if (!this.hasCashier()) {
+                publicCashierSemaphore.release();
+            }
+        }
         while (!this.hasCashier());
 
         goToCashier();
         ownSemaphore.release();
 
         doWork();
+
+        exitCashier();
+    }
+
+    private void exitCashier() {
+        walkPhysics.walk(position, new Position(500, 500));
     }
 
     private void goToQueue() {
@@ -80,7 +91,11 @@ public class ClientThread extends Thread implements Client {
     }
 
     private void doWork() {
-        int waitFor = attendantSeconds;
+        try {
+            Thread.sleep(attendantSeconds * 1000L);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void goToCashier() {

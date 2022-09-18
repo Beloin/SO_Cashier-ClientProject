@@ -38,6 +38,11 @@ public class CashierThread extends Thread implements Cashier {
     }
 
     private void doWork(int attSeconds) {
+        try {
+            Thread.sleep(attSeconds * 1000L);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

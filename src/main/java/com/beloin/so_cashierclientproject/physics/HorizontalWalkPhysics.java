@@ -32,32 +32,57 @@ public class HorizontalWalkPhysics implements WalkPhysics {
         // TODO: BUG: This only works if `to` bigger then `from`
         float verticalStart = from.getY();
         float verticalEnd = to.getY();
-        float blocksWalked = walkSpeed / blockSize;
+        float blocksPerTime = walkSpeed / blockSize;
 
-        float currentVerticalPosition = verticalStart;
-        while (currentVerticalPosition <= verticalEnd) {
-            from.setY(from.getY() + blocksWalked);
-            currentVerticalPosition += blocksWalked;
-            try {
-                Thread.sleep(worldTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        boolean isVerticalForward = verticalStart <= verticalEnd;
+        verticalForward(from, verticalStart, verticalEnd, blocksPerTime);
 
         float horizontalStart = from.getX();
         float horizontalEnd = to.getX();
+        boolean isHorizontalForward = verticalStart <= verticalEnd;
+
+        horizontalForward(from, blocksPerTime, horizontalStart, horizontalEnd);
+
+        System.out.println("Finished Walking... " + from + " -> " + to);
+    }
+
+    private void horizontalForward(Position from, float blocksPerTime, float horizontalStart, float horizontalEnd) {
         float currentHorizontalPosition = horizontalStart;
         while (currentHorizontalPosition <= horizontalEnd) {
-            from.setX(from.getX() + blocksWalked);
-            currentHorizontalPosition += blocksWalked;
+            from.setX(from.getX() + blocksPerTime);
+            currentHorizontalPosition += blocksPerTime;
             try {
                 Thread.sleep(worldTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
-        System.out.println("Finished Walking... " + from + " -> " + to);
     }
+
+    private void verticalForward(Position from, float verticalStart, float verticalEnd, float blocksPerTime) {
+        float currentVerticalPosition = verticalStart;
+        while (currentVerticalPosition <= verticalEnd) {
+            from.setY(from.getY() + blocksPerTime);
+            currentVerticalPosition += blocksPerTime;
+            try {
+                Thread.sleep(worldTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void verticalBackwards(Position from, float verticalStart, float verticalEnd, float blocksPerTime){
+        float currentVerticalPosition = verticalStart;
+        while (currentVerticalPosition > verticalEnd) {
+            from.setY(from.getY() - blocksPerTime);
+            currentVerticalPosition -= blocksPerTime;
+            try {
+                Thread.sleep(worldTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private void horizontalBackwards() {}
 }
