@@ -144,7 +144,6 @@ public class HelloApplication extends Application {
         PositionedRectangular clientInterface = new PositionedRectangular(clientThread);
         positionedRectangulars.add(clientInterface);
         root.getChildren().add(clientInterface.getRectangle());
-
         return clientThread;
     }
 
