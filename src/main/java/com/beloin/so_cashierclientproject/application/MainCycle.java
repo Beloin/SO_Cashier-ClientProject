@@ -2,6 +2,7 @@ package com.beloin.so_cashierclientproject.application;
 
 
 import java.util.List;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import static com.beloin.so_cashierclientproject.config.GlobalConfiguration.minimumWorldTime;
 
@@ -26,6 +27,7 @@ public class MainCycle extends Thread {
     }
 
     private void updatePositionedItems() {
+        // TODO: Problem with concurrency
         for (PositionedRectangular positioned : positionedList) {
             updatePositioned(positioned);
         }

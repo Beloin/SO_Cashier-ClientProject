@@ -28,6 +28,9 @@ public class HelloApplication extends Application {
     private int clientIdCounter = 0;
     private Position queuePosition = new Position(250, 250);
     ConcurrentClientQueue clientQueue = new ConcurrentClientQueue();
+
+    // TODO: THIS GENERATES CONCURRENCY PROBLEMS. THIS SHOULD BE USED WITH SEMAPHORES
+    // TODO: This will be changed conform we choose the interface method
     List<PositionedRectangular> positionedRectangulars = new ArrayList<>(10);
 
     int cashierCount = 2;
@@ -41,9 +44,6 @@ public class HelloApplication extends Application {
 
         Group root = new Group();
         Scene scene2 = new Scene(root);
-
-        // TODO: Update Queue Position dynamically
-
 
         ClientThread client1 = new ClientThread(
                 clientIdCounter++, new Position(0, 0), new Position(250, 250),
@@ -65,6 +65,10 @@ public class HelloApplication extends Application {
                 new Position(450, 170), publicClientsSemaphore,
                 publicCashiersSemaphore, clientQueue
         );
+       CashierThread cashier3 = new CashierThread(
+                new Position(450, 140), publicClientsSemaphore,
+                publicCashiersSemaphore, clientQueue
+        );
 
 
         Node baseNode = setupBaseNode();
@@ -76,13 +80,16 @@ public class HelloApplication extends Application {
         PositionedRectangular clientInterface2 = new PositionedRectangular(client2);
         PositionedRectangular cashierPositioned = new PositionedRectangular(cashier, "blue");
         PositionedRectangular cashierPositioned2 = new PositionedRectangular(cashier2, "blue");
+        PositionedRectangular cashierPositioned3 = new PositionedRectangular(cashier3, "blue");
         positionedRectangulars.add(clientInterface);
         positionedRectangulars.add(clientInterface2);
         positionedRectangulars.add(cashierPositioned);
         positionedRectangulars.add(cashierPositioned2);
+        positionedRectangulars.add(cashierPositioned3);
 
         root.getChildren().add(cashierPositioned.getRectangle());
         root.getChildren().add(cashierPositioned2.getRectangle());
+        root.getChildren().add(cashierPositioned3.getRectangle());
 
         root.getChildren().add(clientInterface.getRectangle());
         root.getChildren().add(clientInterface2.getRectangle());
@@ -105,6 +112,7 @@ public class HelloApplication extends Application {
                 // Start Clients
                 cashier.start();
                 cashier2.start();
+                cashier3.start();
                 client1.start();
                 client2.start();
             }
