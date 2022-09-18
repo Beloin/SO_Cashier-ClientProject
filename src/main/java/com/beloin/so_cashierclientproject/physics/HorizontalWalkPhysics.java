@@ -44,7 +44,7 @@ public class HorizontalWalkPhysics implements WalkPhysics {
 
         float horizontalStart = from.getX();
         float horizontalEnd = to.getX();
-        boolean isHorizontalForward = verticalStart <= verticalEnd;
+        boolean isHorizontalForward = horizontalStart <= horizontalEnd;
 
         if (isHorizontalForward) {
             horizontalForward(from, blocksPerTime, horizontalStart, horizontalEnd);
