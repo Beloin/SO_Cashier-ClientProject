@@ -30,18 +30,27 @@ public class HorizontalWalkPhysics implements WalkPhysics {
         // We arbitrarily start by the vertical
         System.out.println("Walking... " + from + " -> " + to);
         // TODO: BUG: This only works if `to` bigger then `from`
-        float verticalStart = from.getY();
-        float verticalEnd = to.getY();
         float blocksPerTime = walkSpeed / blockSize;
 
+        float verticalStart = from.getY();
+        float verticalEnd = to.getY();
         boolean isVerticalForward = verticalStart <= verticalEnd;
-        verticalForward(from, verticalStart, verticalEnd, blocksPerTime);
+
+        if (isVerticalForward) {
+            verticalForward(from, verticalStart, verticalEnd, blocksPerTime);
+        } else {
+            verticalBackwards(from, verticalStart, verticalEnd, blocksPerTime);
+        }
 
         float horizontalStart = from.getX();
         float horizontalEnd = to.getX();
         boolean isHorizontalForward = verticalStart <= verticalEnd;
 
-        horizontalForward(from, blocksPerTime, horizontalStart, horizontalEnd);
+        if (isHorizontalForward) {
+            horizontalForward(from, blocksPerTime, horizontalStart, horizontalEnd);
+        } else {
+            horizontalBackwards(from, blocksPerTime, horizontalStart, horizontalEnd);
+        }
 
         System.out.println("Finished Walking... " + from + " -> " + to);
     }
@@ -51,6 +60,19 @@ public class HorizontalWalkPhysics implements WalkPhysics {
         while (currentHorizontalPosition <= horizontalEnd) {
             from.setX(from.getX() + blocksPerTime);
             currentHorizontalPosition += blocksPerTime;
+            try {
+                Thread.sleep(worldTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void horizontalBackwards(Position from, float blocksPerTime, float horizontalStart, float horizontalEnd) {
+        float currentHorizontalPosition = horizontalStart;
+        while (currentHorizontalPosition > horizontalEnd) {
+            from.setX(from.getX() - blocksPerTime);
+            currentHorizontalPosition -= blocksPerTime;
             try {
                 Thread.sleep(worldTime);
             } catch (InterruptedException e) {
@@ -71,7 +93,6 @@ public class HorizontalWalkPhysics implements WalkPhysics {
             }
         }
     }
-
     private void verticalBackwards(Position from, float verticalStart, float verticalEnd, float blocksPerTime){
         float currentVerticalPosition = verticalStart;
         while (currentVerticalPosition > verticalEnd) {
@@ -84,5 +105,4 @@ public class HorizontalWalkPhysics implements WalkPhysics {
             }
         }
     }
-    private void horizontalBackwards() {}
 }
