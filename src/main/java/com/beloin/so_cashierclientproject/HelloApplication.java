@@ -1,6 +1,9 @@
 package com.beloin.so_cashierclientproject;
 
-import com.beloin.so_cashierclientproject.application.ClientInterface;
+import com.beloin.so_cashierclientproject.application.MainCycle;
+import com.beloin.so_cashierclientproject.application.PositionedRectangular;
+import com.beloin.so_cashierclientproject.models.Cashier;
+import com.beloin.so_cashierclientproject.models.CashierThread;
 import com.beloin.so_cashierclientproject.models.ClientThread;
 import com.beloin.so_cashierclientproject.models.ConcurrentClientQueue;
 import com.beloin.so_cashierclientproject.models.plain.Position;
@@ -18,6 +21,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 public class HelloApplication extends Application {
@@ -29,6 +34,8 @@ public class HelloApplication extends Application {
         Group root = new Group();
         Scene scene2 = new Scene(root);
 
+        // TODO: Update Queue Position dynamically
+
         ConcurrentClientQueue clientQueue = new ConcurrentClientQueue();
         int cashierCount = 1;
         Semaphore publicClientsSemaphore = new Semaphore(0);
@@ -38,23 +45,50 @@ public class HelloApplication extends Application {
                 publicClientsSemaphore, publicCashiersSemaphore,
                 clientQueue, 5
         );
+        ClientThread client2 = new ClientThread(
+                0, new Position(0, 20), new Position(250, 250),
+                publicClientsSemaphore, publicCashiersSemaphore,
+                clientQueue, 5
+        );
 
-        Button startButton = new Button("Start Button");
-        startButton.setLayoutX(12);
+        CashierThread cashier = new CashierThread(
+                new Position(450, 200), publicClientsSemaphore,
+                publicCashiersSemaphore, clientQueue
+        );
+
 
         Node baseNode = setupBaseNode();
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(baseNode);
-        stackPane.getChildren().add(startButton);
         root.getChildren().add(stackPane);
 
-        ClientInterface clientInterface = new ClientInterface(client1);
-        root.getChildren().add(clientInterface.getRectangle());
+        List<PositionedRectangular> positionedRectangulars = new ArrayList<>(2);
+        PositionedRectangular clientInterface = new PositionedRectangular(client1);
+        PositionedRectangular clientInterface2 = new PositionedRectangular(client2);
+        PositionedRectangular cashierPositioned = new PositionedRectangular(cashier, "blue");
+        positionedRectangulars.add(clientInterface);
+        positionedRectangulars.add(clientInterface2);
+        positionedRectangulars.add(cashierPositioned);
 
+        root.getChildren().add(cashierPositioned.getRectangle());
+
+        root.getChildren().add(clientInterface.getRectangle());
+        root.getChildren().add(clientInterface2.getRectangle());
+
+        MainCycle mainCycle = new MainCycle(positionedRectangulars);
+
+        // Configure Button
+        Button startButton = new Button("Start Button");
+        startButton.setLayoutX(12);
+        stackPane.getChildren().add(startButton);
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                clientInterface.start();
+                mainCycle.start();
+                // Start Clients
+                cashier.start();
+                client1.start();
+                client2.start();
             }
         });
 

@@ -9,7 +9,7 @@ public class GlobalConfiguration {
     /**
      * Time in MS
      */
-    public static final int worldTime = 200;
+    public static final int worldTime = 50;
 
     public static final int minimumWorldTime = 10;
 

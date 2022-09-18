@@ -29,13 +29,10 @@ public class CashierThread extends Thread implements Cashier {
             publicClientsSemaphore.acquireUninterruptibly();
             Client c = queue.poll();
             c.setCashier(this);
+            publicCashierSemaphore.release();
             int attSeconds = c.getAttendantSeconds();
             Semaphore clientSemaphore = c.getOwnSemaphore();
-
-            publicCashierSemaphore.release();
-
             clientSemaphore.acquireUninterruptibly();
-
             doWork(attSeconds);
         }
     }

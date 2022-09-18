@@ -5,13 +5,13 @@ import java.util.List;
 
 import static com.beloin.so_cashierclientproject.config.GlobalConfiguration.minimumWorldTime;
 
-class MainCycle extends Thread {
+public class MainCycle extends Thread {
 
-    MainCycle(List<PositionedJavaFXImpl> fxList) {
+    public MainCycle(List<PositionedRectangular> fxList) {
         this.positionedList = fxList;
     }
 
-    private final List<PositionedJavaFXImpl> positionedList;
+    private final List<PositionedRectangular> positionedList;
 
     @Override
     public void run() {
@@ -26,12 +26,12 @@ class MainCycle extends Thread {
     }
 
     private void updatePositionedItems() {
-        for (PositionedJavaFXImpl positionedJavaFX : positionedList) {
-            updatePositioned(positionedJavaFX);
+        for (PositionedRectangular positioned : positionedList) {
+            updatePositioned(positioned);
         }
     }
 
-    void updatePositioned(PositionedJavaFXImpl positionedJavaFX) {
-        positionedJavaFX.updatePosition();
+    void updatePositioned(PositionedRectangular positioned) {
+        positioned.updatePosition();
     }
 }
