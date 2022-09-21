@@ -34,14 +34,19 @@ run() {
 Client Thread:
 ```
 run() {
-    goToQueue();
     down(clientQueueMutex);
     queue.append(this);
     up(clientQueueMutex);
+    goToQueue();
 
     up(clients);
 
-    while (!this.hasCashier()) down(cashiers);
+    while (!this.hasCashier()) {
+        down(cashiers)
+        if (!this.HasCashier()) {
+            up(cashiers)
+        }
+    };
     
     goToCashier();
 
@@ -50,3 +55,9 @@ run() {
     goToHome()
 }
 ```
+
+
+## TODO:
+
+`while (!this.hasCashier()) down(cashiers);`  
+Can be changed to a list of client X ticket, `while(currentTicket != this.ticket) down(cashiers)`;

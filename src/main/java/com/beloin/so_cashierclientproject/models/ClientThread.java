@@ -63,9 +63,12 @@ public class ClientThread extends Thread implements Client {
     public void run() {
         this.queue.add(this);
         goToQueue();
+        // up == release, down == acquire
+        // release "Soltar", acquire "Adquirir"
         publicClientsSemaphore.release();
 
         do {
+            // down(caixas)
             publicCashierSemaphore.acquireUninterruptibly();
             if (!this.hasCashier()) {
                 publicCashierSemaphore.release();
@@ -92,6 +95,8 @@ public class ClientThread extends Thread implements Client {
 
     private void doWork() {
         try {
+            // TODO: DO SOMETHING INSTEAD OF SLEEP
+            // TODO: IMPLEMENT WITH CALLBACKS OR SOMETHING LIKE STRATEGY
             Thread.sleep(attendantSeconds * 1000L);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
