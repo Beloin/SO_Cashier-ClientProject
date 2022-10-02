@@ -2,6 +2,7 @@ package com.beloin.so_cashierclientproject.application;
 
 
 import com.beloin.so_cashierclientproject.application.model.PositionedView;
+import com.beloin.so_cashierclientproject.application.utils.ConcurrencyPositionedList;
 
 import java.util.List;
 
@@ -9,11 +10,11 @@ import static com.beloin.so_cashierclientproject.config.GlobalConfiguration.mini
 
 public class MainCycle extends Thread {
 
-    public MainCycle(List<PositionedView> fxList) {
+    public MainCycle(ConcurrencyPositionedList fxList) {
         this.positionedList = fxList;
     }
 
-    private final List<PositionedView> positionedList;
+    private final ConcurrencyPositionedList positionedList;
 
     @Override
     public void run() {
@@ -31,8 +32,7 @@ public class MainCycle extends Thread {
     }
 
     private void updatePositionedItems() {
-        // TODO: Problem with concurrency
-        for (PositionedView positioned : positionedList) {
+        for (PositionedView positioned : positionedList.getList()) {
             updatePositioned(positioned);
         }
     }
