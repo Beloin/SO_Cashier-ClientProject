@@ -1,18 +1,19 @@
 package com.beloin.so_cashierclientproject.application;
 
 
+import com.beloin.so_cashierclientproject.application.model.PositionedView;
+
 import java.util.List;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 import static com.beloin.so_cashierclientproject.config.GlobalConfiguration.minimumWorldTime;
 
 public class MainCycle extends Thread {
 
-    public MainCycle(List<PositionedRectangular> fxList) {
+    public MainCycle(List<PositionedView> fxList) {
         this.positionedList = fxList;
     }
 
-    private final List<PositionedRectangular> positionedList;
+    private final List<PositionedView> positionedList;
 
     @Override
     public void run() {
@@ -31,12 +32,12 @@ public class MainCycle extends Thread {
 
     private void updatePositionedItems() {
         // TODO: Problem with concurrency
-        for (PositionedRectangular positioned : positionedList) {
+        for (PositionedView positioned : positionedList) {
             updatePositioned(positioned);
         }
     }
 
-    void updatePositioned(PositionedRectangular positioned) {
+    void updatePositioned(PositionedView positioned) {
         positioned.updatePosition();
     }
 }

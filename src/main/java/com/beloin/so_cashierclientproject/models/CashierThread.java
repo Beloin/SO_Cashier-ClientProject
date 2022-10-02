@@ -40,7 +40,7 @@ public class CashierThread extends Thread implements Cashier {
     private void doWork(int attSeconds) {
         try {
             // TODO: DO SOMETHING INSTEAD OF SLEEP
-            // TODO: IMPLEMENT WITH CALLBACKS OR SOMETHING LIKE STRATEGY
+            // TODO: IMPLEMENT WITH CALLBACKS OR SOMETHING LIKE COMMAND
             Thread.sleep(attSeconds * 1000L);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

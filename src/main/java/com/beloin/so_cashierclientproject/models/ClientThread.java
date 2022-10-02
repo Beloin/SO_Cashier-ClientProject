@@ -37,6 +37,7 @@ public class ClientThread extends Thread implements Client {
 
     private final Position position;
     private final Position queuePosition;
+    // TODO: USE WALK ANIMATIONS
     private final WalkPhysics walkPhysics;
     private final int attendantSeconds;
 

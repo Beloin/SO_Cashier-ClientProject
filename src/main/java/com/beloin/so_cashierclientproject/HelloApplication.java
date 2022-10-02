@@ -1,12 +1,12 @@
 package com.beloin.so_cashierclientproject;
 
 import com.beloin.so_cashierclientproject.application.MainCycle;
-import com.beloin.so_cashierclientproject.application.PositionedRectangular;
+import com.beloin.so_cashierclientproject.application.model.ModelImageView;
+import com.beloin.so_cashierclientproject.application.model.PositionedView;
+import com.beloin.so_cashierclientproject.config.GlobalConfiguration;
 import com.beloin.so_cashierclientproject.models.*;
 import com.beloin.so_cashierclientproject.models.plain.Position;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -31,7 +31,7 @@ public class HelloApplication extends Application {
 
     // TODO: THIS GENERATES CONCURRENCY PROBLEMS. THIS SHOULD BE USED WITH SEMAPHORES
     // TODO: This will be changed conform we choose the interface method
-    List<PositionedRectangular> positionedRectangulars = new ArrayList<>(10);
+    List<PositionedView> pViews = new ArrayList<>(10);
 
     int cashierCount = 2;
     Semaphore publicClientsSemaphore = new Semaphore(0);
@@ -45,82 +45,68 @@ public class HelloApplication extends Application {
         Group root = new Group();
         Scene scene2 = new Scene(root);
 
+
         ClientThread client1 = new ClientThread(
                 clientIdCounter++, new Position(0, 0), new Position(250, 250),
                 publicClientsSemaphore, publicCashiersSemaphore,
                 clientQueue, 5
         );
-        ClientThread client2 = new ClientThread(
-                clientIdCounter++, new Position(0, 20), new Position(250, 250),
-                publicClientsSemaphore, publicCashiersSemaphore,
-                clientQueue, 5
-        );
-
+//        ClientThread client2 = new ClientThread(
+//                clientIdCounter++, new Position(0, 20), new Position(250, 250),
+//                publicClientsSemaphore, publicCashiersSemaphore,
+//                clientQueue, 5
+//        );
+//
         CashierThread cashier = new CashierThread(
                 new Position(450, 200), publicClientsSemaphore,
                 publicCashiersSemaphore, clientQueue
         );
 
-       CashierThread cashier2 = new CashierThread(
-                new Position(450, 170), publicClientsSemaphore,
-                publicCashiersSemaphore, clientQueue
-        );
-       CashierThread cashier3 = new CashierThread(
-                new Position(450, 140), publicClientsSemaphore,
-                publicCashiersSemaphore, clientQueue
-        );
-
-
+//       CashierThread cashier2 = new CashierThread(
+//                new Position(450, 170), publicClientsSemaphore,
+//                publicCashiersSemaphore, clientQueue
+//        );
+//       CashierThread cashier3 = new CashierThread(
+//                new Position(450, 140), publicClientsSemaphore,
+//                publicCashiersSemaphore, clientQueue
+//        );
+//
+//
         Node baseNode = setupBaseNode();
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(baseNode);
         root.getChildren().add(stackPane);
 
-        PositionedRectangular clientInterface = new PositionedRectangular(client1);
-        PositionedRectangular clientInterface2 = new PositionedRectangular(client2);
-        PositionedRectangular cashierPositioned = new PositionedRectangular(cashier, "blue");
-        PositionedRectangular cashierPositioned2 = new PositionedRectangular(cashier2, "blue");
-        PositionedRectangular cashierPositioned3 = new PositionedRectangular(cashier3, "blue");
-        positionedRectangulars.add(clientInterface);
-        positionedRectangulars.add(clientInterface2);
-        positionedRectangulars.add(cashierPositioned);
-        positionedRectangulars.add(cashierPositioned2);
-        positionedRectangulars.add(cashierPositioned3);
-
-        root.getChildren().add(cashierPositioned.getRectangle());
-        root.getChildren().add(cashierPositioned2.getRectangle());
-        root.getChildren().add(cashierPositioned3.getRectangle());
-
-        root.getChildren().add(clientInterface.getRectangle());
-        root.getChildren().add(clientInterface2.getRectangle());
-
-        MainCycle mainCycle = new MainCycle(positionedRectangulars);
-
+        String clientWomanPath = GlobalConfiguration.imagePath + "woman.png";
+        String cashierPath = GlobalConfiguration.imagePath + "cashier.png";
+        ModelImageView clientImageView = new ModelImageView(client1, clientWomanPath);
+        ModelImageView cashierImageView = new ModelImageView(cashier, cashierPath);
+        pViews.add(clientImageView);
+        pViews.add(cashierImageView);
+        root.getChildren().add(cashierImageView.getView());
+        root.getChildren().add(clientImageView.getView());
+        MainCycle mainCycle = new MainCycle(pViews);
         // Configure Button
         Button startButton = new Button("Start Button");
-        Button addClientButton = new Button("Add Client");
+        Button addClientButton = new Button("Remove Cashier as Test");
         HBox buttonLayout = new HBox();
         buttonLayout.setLayoutX(12);
         buttonLayout.getChildren().add(startButton);
         buttonLayout.getChildren().add(addClientButton);
         stackPane.getChildren().add(buttonLayout);
-
-        startButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                mainCycle.start();
-                // Start Clients
-                cashier.start();
-                cashier2.start();
-                cashier3.start();
-                client1.start();
-                client2.start();
-            }
+//
+        startButton.setOnAction(actionEvent -> {
+            mainCycle.start();
+            // Start Clients
+            cashier.start();
+//            cashier2.start();
+//            cashier3.start();
+            client1.start();
+//            client2.start();
         });
-
+//
         addClientButton.setOnAction(actionEvent -> {
-            ClientThread c = this.createClient(root);
-            c.start();
+            root.getChildren().remove(cashierImageView.getView());
         });
 
         stage.setTitle("Hello!");
@@ -136,16 +122,16 @@ public class HelloApplication extends Application {
         return baseRect;
     }
 
-    private synchronized ClientThread createClient(Group root) {
-        Position initialPosition = new Position(0, 0);
-        ClientThread clientThread = new ClientThread(clientIdCounter++, initialPosition, getQueuePosition(),
-                publicClientsSemaphore, publicCashiersSemaphore, clientQueue, 2
-        );
-        PositionedRectangular clientInterface = new PositionedRectangular(clientThread);
-        positionedRectangulars.add(clientInterface);
-        root.getChildren().add(clientInterface.getRectangle());
-        return clientThread;
-    }
+//    private synchronized ClientThread createClient(Group root) {
+//        Position initialPosition = new Position(0, 0);
+//        ClientThread clientThread = new ClientThread(clientIdCounter++, initialPosition, getQueuePosition(),
+//                publicClientsSemaphore, publicCashiersSemaphore, clientQueue, 2
+//        );
+//        PositionedRectangular clientInterface = new PositionedRectangular(clientThread);
+//        pViews.add(clientInterface);
+//        root.getChildren().add(clientInterface.getRectangle());
+//        return clientThread;
+//    }
 
     private synchronized Position getQueuePosition() {
         int positionAppender = 20 * clientQueue.getSize();

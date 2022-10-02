@@ -17,4 +17,6 @@ public class GlobalConfiguration {
      * Block size in meter
      */
     public final static float blockSize = 1;
+
+    public final static String imagePath = "assets/";
 }
