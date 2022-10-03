@@ -16,6 +16,8 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -54,11 +56,22 @@ public class HelloApplication extends Application {
                         dialog.initOwner(stage);
                         VBox dialogVbox = new VBox(20);
                         dialogVbox.getChildren().add(new Text("This is a Dialog"));
+                        Label label1 = new Label("Tempo de Atendimento");
+                        TextField textField = new TextField();
+                        dialogVbox.getChildren().addAll(label1, textField);
+                        dialogVbox.setSpacing(10);
+
+                        Button ok = new Button("Ok!");
+                        ok.setOnAction(actionEvent -> {
+                            dialog.close();
+                        });
+
+                        dialogVbox.getChildren().add(ok);
+
                         Scene dialogScene = new Scene(dialogVbox, 300, 200);
                         dialog.setScene(dialogScene);
                         dialog.show();
                         // TODO ADD TEXT INPUT TO THIS
-//                        dialog.close();
                     });
 
             HBox buttonLayout = new HBox();
