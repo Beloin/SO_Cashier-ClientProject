@@ -12,15 +12,19 @@ import com.beloin.so_cashierclientproject.models.plain.Position;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -33,8 +37,10 @@ import java.util.concurrent.Semaphore;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) {
+        BorderPane borderPane = new BorderPane();
         Group root = new Group();
-        Scene scene2 = new Scene(root, 1000, 1000);
+        borderPane.setCenter(root);
+        Scene scene2 = new Scene(borderPane, 1000, 1000);
 
         stage.setTitle("Cashier and Clients");
         stage.setScene(scene2);
@@ -44,26 +50,45 @@ public class HelloApplication extends Application {
         mn.buildMenu(r -> {
             StackPane stackPane = new StackPane();
 
-            Button startButton = new Button("Start Button");
-            Button addClient = new Button("Add Client");
+            Button addClientButton = new Button();
 
-            Button btn = new Button();
-            btn.setText("Open Dialog");
-            btn.setOnAction(
+            addClientButton.setText("Adicionar Cliente");
+            HBox buttonLayout = new HBox();
+            buttonLayout.getChildren().add(addClientButton);
+            buttonLayout.setLayoutX(12);
+            buttonLayout.setSpacing(10);
+            stackPane.getChildren().add(buttonLayout);
+            CashierAndClientGame game = new CashierAndClientGame(r, scene2, root);
+            root.getChildren().add(stackPane);
+
+            addClientButton.setOnAction(
                     event -> {
                         final Stage dialog = new Stage();
                         dialog.initModality(Modality.APPLICATION_MODAL);
                         dialog.initOwner(stage);
                         VBox dialogVbox = new VBox(20);
-                        dialogVbox.getChildren().add(new Text("This is a Dialog"));
-                        Label label1 = new Label("Tempo de Atendimento");
+
+
+                        Label label1 = new Label("Tempo de Atendimento (Em segundos):");
                         TextField textField = new TextField();
+
+                        dialogVbox.setPadding(new Insets(0, 10, 0, 10));
                         dialogVbox.getChildren().addAll(label1, textField);
                         dialogVbox.setSpacing(10);
+                        dialogVbox.setAlignment(Pos.CENTER);
 
                         Button ok = new Button("Ok!");
                         ok.setOnAction(actionEvent -> {
-                            dialog.close();
+                            try {
+                                int attendment = Integer.parseInt(textField.getText());
+                                ClientThread c = game.createClient(attendment);
+                                c.start();
+                                dialog.close();
+                            } catch (FileNotFoundException e) {
+                                throw new RuntimeException(e);
+                            } catch (NumberFormatException e) {
+                                label1.setTextFill(Color.ORANGERED);
+                            }
                         });
 
                         dialogVbox.getChildren().add(ok);
@@ -71,32 +96,10 @@ public class HelloApplication extends Application {
                         Scene dialogScene = new Scene(dialogVbox, 300, 200);
                         dialog.setScene(dialogScene);
                         dialog.show();
-                        // TODO ADD TEXT INPUT TO THIS
-                    });
+                    }
+            );
 
-            HBox buttonLayout = new HBox();
-            buttonLayout.getChildren().add(btn);
-
-            buttonLayout.setLayoutX(12);
-            buttonLayout.setSpacing(10);
-
-            buttonLayout.getChildren().add(startButton);
-            buttonLayout.getChildren().add(addClient);
-
-            stackPane.getChildren().add(buttonLayout);
-            CashierAndClientGame game = new CashierAndClientGame(r, scene2, root);
-            root.getChildren().add(stackPane);
-            addClient.setOnAction(a -> {
-                try {
-                    ClientThread c = game.createClient(5);
-                    c.start();
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            startButton.setOnAction(a -> {
-                game.start();
-            });
+            game.start();
         });
     }
 
