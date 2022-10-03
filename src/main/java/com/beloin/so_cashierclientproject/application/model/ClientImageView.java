@@ -16,12 +16,17 @@ public class ClientImageView implements PositionedView<Node> {
     private final PositionedModel client;
 
     public ClientImageView(PositionedModel client, String resourcePath) throws FileNotFoundException {
+        // TODO: USE SINGLETON IN ORDER TO REUSE IMAGES
         Image baseImage = new Image(new FileInputStream(resourcePath));
         this.baseImageView = new ImageView(baseImage);
         this.client = client;
 
         this.baseImageView.setX(client.getPosition().getX());
         this.baseImageView.setY(client.getPosition().getY());
+
+        baseImageView.setPreserveRatio(true);
+        baseImageView.setFitHeight(100);
+        baseImageView.setFitWidth(100);
     }
 
     @Override

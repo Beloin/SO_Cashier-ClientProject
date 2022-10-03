@@ -21,6 +21,10 @@ public class CashierImageView implements PositionedView<ImageView> {
 
         this.baseImageView.setX(model.getPosition().getX());
         this.baseImageView.setY(model.getPosition().getY());
+
+        baseImageView.setPreserveRatio(true);
+        baseImageView.setFitHeight(100);
+        baseImageView.setFitWidth(100);
     }
 
     @Override

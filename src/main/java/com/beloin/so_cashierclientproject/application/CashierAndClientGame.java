@@ -16,6 +16,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 
@@ -28,6 +30,7 @@ public class CashierAndClientGame {
 
     private final MainCycle mainCycle;
     private final QueuePosition queuePosition = new QueuePosition();
+    private final List<CashierThread> cashiers;
 
     final Semaphore publicClientsSemaphore;
     final Semaphore publicCashiersSemaphore;
@@ -41,18 +44,24 @@ public class CashierAndClientGame {
         publicCashiersSemaphore = new Semaphore(cashierCount);
         mainCycle = new MainCycle(positionedList);
         Node baseNode = setupBaseNode();
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().add(baseNode);
-        root.getChildren().add(stackPane);
+        root.getChildren().add(baseNode);
 
         this.scene = scene;
         this.root = root;
 
+        cashiers = new ArrayList<>(cashierCount);
         createCashiers();
     }
 
     public void start() {
         mainCycle.start();
+        startCashiers();
+    }
+
+    private void startCashiers() {
+        for (int i = 0; i < cashierCount; i++) {
+            cashiers.get(i).start();
+        }
     }
 
 
@@ -61,7 +70,7 @@ public class CashierAndClientGame {
         int y = 0;
         for (int i = 0; i < cashierCount; i++) {
             CashierThread cashier = new CashierThread(
-                    new Position(450, y += 100), publicClientsSemaphore,
+                    new Position(750, y += 100), publicClientsSemaphore,
                     publicCashiersSemaphore, clientQueue
             );
 
@@ -71,10 +80,12 @@ public class CashierAndClientGame {
 //            positionedList.add(cashierImageView);
 
             this.root.getChildren().add(cashierImageView.getView());
+
+            cashiers.add(cashier);
         }
     }
 
-    public synchronized void createClient(int attendmentTime) throws FileNotFoundException {
+    public synchronized ClientThread createClient(int attendmentTime) throws FileNotFoundException {
         ClientThread client = new ClientThread(
                 clientIdCounter++,
                 new Position(0, 0), queuePosition.getNextPosition(),
@@ -91,9 +102,15 @@ public class CashierAndClientGame {
         }
 
         ClientImageView clientImageView = new ClientImageView(client, clientPath);
-        positionedList.add(clientImageView);
 
+        positionedList.add(clientImageView);
         this.root.getChildren().add(clientImageView.getView());
+
+        client.setOnQueueArrivalCallback(() -> {
+            queuePosition.freePosition(client.getQueuePosition());
+        });
+
+        return client;
     }
 
     private static Node setupBaseNode() {

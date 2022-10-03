@@ -11,7 +11,7 @@ public class GlobalConfiguration {
      */
     public static final int worldTime = 50;
 
-    public static final int minimumWorldTime = 10;
+    public static final int minimumWorldTime = 1;
 
     /**
      * Block size in meter

@@ -20,8 +20,6 @@ public class MainCycle extends Thread {
     public void run() {
         while (true) {
             try {
-                // TODO: This generates problem:
-                // TODO: Trying to access positionedList while is being used
                 Thread.sleep(minimumWorldTime);
                 updatePositionedItems();
             } catch (Exception e) {
