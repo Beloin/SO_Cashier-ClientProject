@@ -11,10 +11,11 @@ import com.beloin.so_cashierclientproject.models.plain.Position;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,10 @@ public class CashierAndClientGame {
     private final QueuePosition queuePosition = new QueuePosition();
     private final List<CashierThread> cashiers;
 
+    // TODO: ADD COUNTER
+
+    // TODO: ADD QUEUE TICKET
+
     final Semaphore publicClientsSemaphore;
     final Semaphore publicCashiersSemaphore;
 
@@ -45,6 +50,7 @@ public class CashierAndClientGame {
         mainCycle = new MainCycle(positionedList);
         Node baseNode = setupBaseNode();
         root.getChildren().add(baseNode);
+
 
         this.scene = scene;
         this.root = root;
@@ -75,9 +81,7 @@ public class CashierAndClientGame {
             );
 
             CashierImageView cashierImageView = new CashierImageView(cashier, cashierPath);
-
-            // TODO: Add this ?
-//            positionedList.add(cashierImageView);
+            positionedList.add(cashierImageView);
 
             this.root.getChildren().add(cashierImageView.getView());
 
@@ -102,14 +106,8 @@ public class CashierAndClientGame {
         }
 
         ClientImageView clientImageView = new ClientImageView(client, clientPath);
-
         positionedList.add(clientImageView);
         this.root.getChildren().add(clientImageView.getView());
-
-        client.setOnQueueArrivalCallback(() -> {
-            queuePosition.freePosition(client.getQueuePosition());
-        });
-
         return client;
     }
 
@@ -119,5 +117,27 @@ public class CashierAndClientGame {
         baseRect.setHeight(1000);
         baseRect.setWidth(1000);
         return baseRect;
+    }
+
+    // TODO: COULD NOT IMPLEMENT THIS
+    private Image manImage;
+    private Image womanImage;
+    private Image getClientImage() throws FileNotFoundException {
+        if (womanImage == null || manImage == null) {
+            this.createClientImage();
+        }
+
+        if (random.nextFloat() >= 0.5) {
+            return manImage;
+        } else {
+            return womanImage;
+        }
+    }
+
+    private void createClientImage() throws FileNotFoundException {
+        String womanPath = GlobalConfiguration.imagePath + "woman.png";
+        String manPath  = GlobalConfiguration.imagePath + "man.png";
+        manImage = new Image(new FileInputStream(manPath));
+        womanImage = new Image(new FileInputStream(womanPath));
     }
 }

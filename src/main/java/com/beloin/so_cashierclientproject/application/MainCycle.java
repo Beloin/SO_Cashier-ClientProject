@@ -4,10 +4,6 @@ package com.beloin.so_cashierclientproject.application;
 import com.beloin.so_cashierclientproject.application.model.PositionedView;
 import com.beloin.so_cashierclientproject.application.utils.ConcurrencyPositionedList;
 
-import java.util.List;
-
-import static com.beloin.so_cashierclientproject.config.GlobalConfiguration.minimumWorldTime;
-
 public class MainCycle extends Thread {
 
     public MainCycle(ConcurrencyPositionedList fxList) {
@@ -20,7 +16,7 @@ public class MainCycle extends Thread {
     public void run() {
         while (true) {
             try {
-                Thread.sleep(minimumWorldTime);
+//                Thread.sleep(minimumWorldTime);
                 updatePositionedItems();
             } catch (Exception e) {
                 e.printStackTrace();

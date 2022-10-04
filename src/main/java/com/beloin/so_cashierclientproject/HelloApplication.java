@@ -38,16 +38,22 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) {
         BorderPane borderPane = new BorderPane();
-        Group root = new Group();
-        borderPane.setCenter(root);
-        Scene scene2 = new Scene(borderPane, 1000, 1000);
+        Group initialRoot = new Group();
+        borderPane.setCenter(initialRoot);
+        Scene scene2 = new Scene(borderPane, 400, 400);
 
         stage.setTitle("Cashier and Clients");
         stage.setScene(scene2);
         stage.show();
 
-        InitialMenu mn = new InitialMenu(root);
+        InitialMenu mn = new InitialMenu(initialRoot);
         mn.buildMenu(r -> {
+            BorderPane centerDiv = new BorderPane();
+            Group root = new Group();
+            centerDiv.setCenter(root);
+            Scene scene = new Scene(centerDiv, 1000, 1500);
+            stage.setScene(scene);
+
             StackPane stackPane = new StackPane();
 
             Button addClientButton = new Button();
@@ -58,6 +64,7 @@ public class HelloApplication extends Application {
             buttonLayout.setLayoutX(12);
             buttonLayout.setSpacing(10);
             stackPane.getChildren().add(buttonLayout);
+
             CashierAndClientGame game = new CashierAndClientGame(r, scene2, root);
             root.getChildren().add(stackPane);
 
@@ -68,21 +75,31 @@ public class HelloApplication extends Application {
                         dialog.initOwner(stage);
                         VBox dialogVbox = new VBox(20);
 
+                        Label label0 = new Label("Quantidade de Clientes");
+                        TextField textField0 = new TextField();
+                        textField0.setText("1");
 
                         Label label1 = new Label("Tempo de Atendimento (Em segundos):");
                         TextField textField = new TextField();
 
+                        textField.setText("5");
                         dialogVbox.setPadding(new Insets(0, 10, 0, 10));
-                        dialogVbox.getChildren().addAll(label1, textField);
+                        dialogVbox.getChildren().addAll(label0, textField0, label1, textField);
                         dialogVbox.setSpacing(10);
                         dialogVbox.setAlignment(Pos.CENTER);
 
                         Button ok = new Button("Ok!");
                         ok.setOnAction(actionEvent -> {
                             try {
+                                int clientCount = Integer.parseInt(textField0.getText());
                                 int attendment = Integer.parseInt(textField.getText());
-                                ClientThread c = game.createClient(attendment);
-                                c.start();
+
+
+                                for (int i = 0; i < clientCount; i++) {
+                                    ClientThread c = game.createClient(attendment);
+                                    c.start();
+                                }
+
                                 dialog.close();
                             } catch (FileNotFoundException e) {
                                 throw new RuntimeException(e);
@@ -96,6 +113,7 @@ public class HelloApplication extends Application {
                         Scene dialogScene = new Scene(dialogVbox, 300, 200);
                         dialog.setScene(dialogScene);
                         dialog.show();
+                        ok.requestFocus();
                     }
             );
 

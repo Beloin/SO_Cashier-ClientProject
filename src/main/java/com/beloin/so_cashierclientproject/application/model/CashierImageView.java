@@ -2,13 +2,14 @@ package com.beloin.so_cashierclientproject.application.model;
 
 import com.beloin.so_cashierclientproject.models.PositionedModel;
 import com.beloin.so_cashierclientproject.models.plain.Position;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class CashierImageView implements PositionedView<ImageView> {
+public class CashierImageView implements PositionedView<Node> {
     private final ImageView baseImageView;
 //    private final ImageView legs;
 

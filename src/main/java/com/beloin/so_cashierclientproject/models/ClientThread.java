@@ -12,9 +12,20 @@ public class ClientThread extends Thread implements Client {
     }
 
     private Callback onQueueArrivalCallback;
+    private Callback onQueueWayCallback;
+
+    private Callback onFinishCallback;
 
     public void setOnQueueArrivalCallback(Callback onQueueArrivalCallback) {
         this.onQueueArrivalCallback = onQueueArrivalCallback;
+    }
+
+    public void setOnQueueWayCallback(Callback onQueueWayCallback) {
+        this.onQueueWayCallback = onQueueWayCallback;
+    }
+
+    public void setOnFinishCallback(Callback onFinishCallback) {
+        this.onFinishCallback = onFinishCallback;
     }
 
     public Position getQueuePosition() {
@@ -74,6 +85,10 @@ public class ClientThread extends Thread implements Client {
         return attendantSeconds;
     }
 
+    public int getClientId() {
+        return clientId;
+    }
+
     @Override
     public void run() {
         this.queue.add(this);
@@ -102,10 +117,19 @@ public class ClientThread extends Thread implements Client {
     private void exitCashier() {
         walkPhysics.walk(position, position.subtractX(25));
         walkPhysics.walk(position, new Position(1500, 1500));
+
+        if (onFinishCallback != null) {
+            onFinishCallback.handle();
+        }
     }
 
     private void goToQueue() {
+        if (onQueueWayCallback != null) {
+            onQueueWayCallback.handle();
+        }
+
         walkPhysics.walk(position, queuePosition);
+
         if (onQueueArrivalCallback != null) {
             onQueueArrivalCallback.handle();
         }

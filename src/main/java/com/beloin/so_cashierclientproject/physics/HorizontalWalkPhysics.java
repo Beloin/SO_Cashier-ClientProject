@@ -1,5 +1,6 @@
 package com.beloin.so_cashierclientproject.physics;
 
+import com.beloin.so_cashierclientproject.application.model.PositionedView;
 import com.beloin.so_cashierclientproject.config.GlobalConfiguration;
 import com.beloin.so_cashierclientproject.models.plain.Position;
 
@@ -35,7 +36,7 @@ public class HorizontalWalkPhysics implements WalkPhysics {
         float verticalEnd = to.getY();
         boolean isVerticalForward = verticalStart <= verticalEnd;
 
-        if (isVerticalForward) {
+        if (isVerticalForward && verticalEnd - verticalStart >= 0.000001) {
             verticalForward(from, verticalStart, verticalEnd, blocksPerTime);
         } else {
             verticalBackwards(from, verticalStart, verticalEnd, blocksPerTime);
@@ -45,7 +46,7 @@ public class HorizontalWalkPhysics implements WalkPhysics {
         float horizontalEnd = to.getX();
         boolean isHorizontalForward = horizontalStart <= horizontalEnd;
 
-        if (isHorizontalForward) {
+        if (isHorizontalForward && horizontalEnd - horizontalStart >= 0.000001) {
             horizontalForward(from, blocksPerTime, horizontalStart, horizontalEnd);
         } else {
             horizontalBackwards(from, blocksPerTime, horizontalStart, horizontalEnd);
@@ -65,6 +66,7 @@ public class HorizontalWalkPhysics implements WalkPhysics {
                 e.printStackTrace();
             }
         }
+        from.setX(horizontalEnd);
     }
 
     private void horizontalBackwards(Position from, float blocksPerTime, float horizontalStart, float horizontalEnd) {
@@ -78,6 +80,7 @@ public class HorizontalWalkPhysics implements WalkPhysics {
                 e.printStackTrace();
             }
         }
+        from.setX(horizontalEnd);
     }
 
     private void verticalForward(Position from, float verticalStart, float verticalEnd, float blocksPerTime) {
@@ -91,6 +94,8 @@ public class HorizontalWalkPhysics implements WalkPhysics {
                 e.printStackTrace();
             }
         }
+
+        from.setY(verticalEnd);
     }
     private void verticalBackwards(Position from, float verticalStart, float verticalEnd, float blocksPerTime){
         float currentVerticalPosition = verticalStart;
@@ -103,5 +108,6 @@ public class HorizontalWalkPhysics implements WalkPhysics {
                 e.printStackTrace();
             }
         }
+        from.setY(verticalEnd);
     }
 }

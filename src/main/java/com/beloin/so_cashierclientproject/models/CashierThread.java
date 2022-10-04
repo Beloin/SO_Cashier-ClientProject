@@ -1,6 +1,9 @@
 package com.beloin.so_cashierclientproject.models;
 
+import com.beloin.so_cashierclientproject.application.model.PositionedView;
 import com.beloin.so_cashierclientproject.models.plain.Position;
+import com.beloin.so_cashierclientproject.physics.HorizontalWalkPhysics;
+import com.beloin.so_cashierclientproject.physics.WalkPhysics;
 
 import java.util.concurrent.Semaphore;
 
@@ -23,6 +26,8 @@ public class CashierThread extends Thread implements Cashier {
     private final Semaphore publicCashierSemaphore;
     private final ConcurrentClientQueue queue;
 
+    WalkPhysics walkPhysics = HorizontalWalkPhysics.DefaultFactory();
+
     @Override
     public void run() {
         while (true) {
@@ -38,12 +43,15 @@ public class CashierThread extends Thread implements Cashier {
     }
 
     private void doWork(int attSeconds) {
-        try {
-            // TODO: DO SOMETHING INSTEAD OF SLEEP
-            // TODO: IMPLEMENT WITH CALLBACKS OR SOMETHING LIKE COMMAND
-            Thread.sleep(attSeconds * 1000L);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        // TODO: DO SOMETHING INSTEAD OF SLEEP
+        // TODO: IMPLEMENT WITH CALLBACKS OR SOMETHING LIKE STRATEGY
+//            Thread.sleep(attSeconds * 1000L);
+        long current = System.currentTimeMillis();
+        long lopper = current;
+        while (lopper - current < 1000L * attSeconds) {
+            lopper = System.currentTimeMillis();
+            walkPhysics.walk(position, Position.of(position).appendY(5));
+            walkPhysics.walk(position, Position.of(position).subtractY(5));
         }
     }
 

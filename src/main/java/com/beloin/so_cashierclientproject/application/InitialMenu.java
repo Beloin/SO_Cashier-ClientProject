@@ -33,6 +33,7 @@ public class InitialMenu {
     public void buildMenu(ReturnInteger returnFunction) {
         label1 = new Label("Quantidade de Caixas");
         textField = new TextField();
+        textField.setText("3");
         vBox = new VBox();
         vBox.getChildren().addAll(label1, textField);
         vBox.setSpacing(10);
@@ -55,6 +56,7 @@ public class InitialMenu {
         hasBeenBuild = true;
 
         parent.getChildren().add(hBox);
+        ok.requestFocus();
     }
 
     private void removeMenu(ReturnInteger returnFunction) throws FileNotFoundException {
