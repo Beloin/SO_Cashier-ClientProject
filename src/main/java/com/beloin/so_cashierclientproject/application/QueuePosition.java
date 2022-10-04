@@ -7,33 +7,33 @@ import java.util.List;
 import java.util.Random;
 
 public class QueuePosition {
-    private static final int roomSize = 18;
+    private static final int roomSize = 6 * 4;
     private final static List<Position> spaces = new ArrayList<>(roomSize);
+
+    private Random random = new Random();
+
     public QueuePosition() {
-        // TODO: CREATE MATRIX
-
         for (int i = 0; i < 6; i++) {
-            spaces.add(new Position(60 + 60*i, 50));
+            spaces.add(new Position((60 + 60 * i) + random.nextInt() % 10, 50));
         }
 
         for (int i = 0; i < 6; i++) {
-            spaces.add(new Position(60 + 60*i, 100));
+            spaces.add(new Position((60 + 60 * i) + random.nextInt() % 10, 120));
         }
 
         for (int i = 0; i < 6; i++) {
-            spaces.add(new Position(60 + 60*i, 150));
+            spaces.add(new Position((60 + 60 * i) + random.nextInt() % 10, 190));
         }
 
         for (int i = 0; i < 6; i++) {
-            spaces.add(new Position(60 + 60*i, 200));
+            spaces.add(new Position((60 + 60 * i) + random.nextInt() % 10, 260));
         }
 
 
     }
 
-    private final Random random = new Random();
     public Position getNextPosition() {
         int pos = Math.abs(random.nextInt() % roomSize);
-        return  spaces.get(pos);
+        return spaces.get(pos);
     }
 }

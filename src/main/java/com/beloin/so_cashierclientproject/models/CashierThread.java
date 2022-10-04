@@ -43,9 +43,6 @@ public class CashierThread extends Thread implements Cashier {
     }
 
     private void doWork(int attSeconds) {
-        // TODO: DO SOMETHING INSTEAD OF SLEEP
-        // TODO: IMPLEMENT WITH CALLBACKS OR SOMETHING LIKE STRATEGY
-//            Thread.sleep(attSeconds * 1000L);
         long current = System.currentTimeMillis();
         long lopper = current;
         while (lopper - current < 1000L * attSeconds) {

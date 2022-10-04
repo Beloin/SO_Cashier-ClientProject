@@ -136,12 +136,12 @@ public class ClientThread extends Thread implements Client {
     }
 
     private void doWork() {
-        try {
-            // TODO: DO SOMETHING INSTEAD OF SLEEP
-            // TODO: IMPLEMENT WITH CALLBACKS OR SOMETHING LIKE STRATEGY
-            Thread.sleep(attendantSeconds * 1000L);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        long current = System.currentTimeMillis();
+        long lopper = current;
+        while (lopper - current < 1000L * attendantSeconds) {
+            lopper = System.currentTimeMillis();
+            walkPhysics.walk(position, Position.of(position).subtractY(5));
+            walkPhysics.walk(position, Position.of(position).appendY(5));
         }
     }
 
