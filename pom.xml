@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <name>SO_Cashier-ClientProject</name>
 
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.8.2</junit.version>
@@ -67,6 +68,17 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>assets</directory>
+                <targetPath>assets</targetPath>
+            </resource>
+            <resource>
+                <directory>src.main.resources</directory>
+                <targetPath>resources</targetPath>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -99,7 +111,6 @@
                     </execution>
                 </executions>
             </plugin>
-
 
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
