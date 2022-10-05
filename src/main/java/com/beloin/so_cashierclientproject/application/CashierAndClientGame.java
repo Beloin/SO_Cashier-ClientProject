@@ -101,6 +101,7 @@ public class CashierAndClientGame {
                 clientQueue, attendmentTime
         );
 
+
         String clientPath;
         if (random.nextFloat() >= 0.5) {
             clientPath = GlobalConfiguration.imagePath + "woman.png";
@@ -115,6 +116,14 @@ public class CashierAndClientGame {
         for (Node node : nodes) {
             this.root.getChildren().add(node);
         }
+
+        client.setOnFinishCallback(() -> {
+            positionedList.remove(clientImageView);
+            for (Node node : nodes) {
+                this.root.getChildren().remove(node);
+            }
+        });
+
         return client;
     }
 
@@ -129,6 +138,7 @@ public class CashierAndClientGame {
     // TODO: COULD NOT IMPLEMENT THIS
     private Image manImage;
     private Image womanImage;
+
     private Image getClientImage() throws FileNotFoundException {
         if (womanImage == null || manImage == null) {
             this.createClientImage();
@@ -143,7 +153,7 @@ public class CashierAndClientGame {
 
     private void createClientImage() throws FileNotFoundException {
         String womanPath = GlobalConfiguration.imagePath + "woman.png";
-        String manPath  = GlobalConfiguration.imagePath + "man.png";
+        String manPath = GlobalConfiguration.imagePath + "man.png";
         manImage = new Image(new FileInputStream(manPath));
         womanImage = new Image(new FileInputStream(womanPath));
     }
