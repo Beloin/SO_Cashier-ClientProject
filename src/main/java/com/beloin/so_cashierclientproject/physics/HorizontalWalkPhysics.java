@@ -1,6 +1,5 @@
 package com.beloin.so_cashierclientproject.physics;
 
-import com.beloin.so_cashierclientproject.application.model.PositionedView;
 import com.beloin.so_cashierclientproject.config.GlobalConfiguration;
 import com.beloin.so_cashierclientproject.models.plain.Position;
 
@@ -60,11 +59,7 @@ public class HorizontalWalkPhysics implements WalkPhysics {
         while (currentHorizontalPosition <= horizontalEnd) {
             from.setX(from.getX() + blocksPerTime);
             currentHorizontalPosition += blocksPerTime;
-            try {
-                Thread.sleep(worldTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            waitForWorldTime();
         }
         from.setX(horizontalEnd);
     }
@@ -74,11 +69,8 @@ public class HorizontalWalkPhysics implements WalkPhysics {
         while (currentHorizontalPosition > horizontalEnd) {
             from.setX(from.getX() - blocksPerTime);
             currentHorizontalPosition -= blocksPerTime;
-            try {
-                Thread.sleep(worldTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+            waitForWorldTime();
         }
         from.setX(horizontalEnd);
     }
@@ -88,26 +80,26 @@ public class HorizontalWalkPhysics implements WalkPhysics {
         while (currentVerticalPosition <= verticalEnd) {
             from.setY(from.getY() + blocksPerTime);
             currentVerticalPosition += blocksPerTime;
-            try {
-                Thread.sleep(worldTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            waitForWorldTime();
         }
 
         from.setY(verticalEnd);
     }
+
     private void verticalBackwards(Position from, float verticalStart, float verticalEnd, float blocksPerTime){
         float currentVerticalPosition = verticalStart;
         while (currentVerticalPosition > verticalEnd) {
             from.setY(from.getY() - blocksPerTime);
             currentVerticalPosition -= blocksPerTime;
-            try {
-                Thread.sleep(worldTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            waitForWorldTime();
         }
         from.setY(verticalEnd);
+    }
+    private void waitForWorldTime() {
+        long current = System.currentTimeMillis();
+        long lopper = current;
+        while (lopper - current < worldTime) {
+            lopper = System.currentTimeMillis();
+        }
     }
 }
