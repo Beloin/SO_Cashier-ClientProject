@@ -7,31 +7,6 @@ import com.beloin.so_cashierclientproject.physics.WalkPhysics;
 import java.util.concurrent.Semaphore;
 
 public class ClientThread extends Thread implements Client {
-    public interface Callback {
-        void handle();
-    }
-
-    private Callback onQueueArrivalCallback;
-    private Callback onQueueWayCallback;
-
-    private Callback onFinishCallback;
-
-    public void setOnQueueArrivalCallback(Callback onQueueArrivalCallback) {
-        this.onQueueArrivalCallback = onQueueArrivalCallback;
-    }
-
-    public void setOnQueueWayCallback(Callback onQueueWayCallback) {
-        this.onQueueWayCallback = onQueueWayCallback;
-    }
-
-    public void setOnFinishCallback(Callback onFinishCallback) {
-        this.onFinishCallback = onFinishCallback;
-    }
-
-    public Position getQueuePosition() {
-        return queuePosition;
-    }
-
     public ClientThread(
             int clientId,
             Position initialPosition,
@@ -54,7 +29,6 @@ public class ClientThread extends Thread implements Client {
 
     private Cashier cashier;
     private final int clientId;
-    // TODO: Change to static array using clients id
     private final Semaphore ownSemaphore;
     private final Semaphore publicClientsSemaphore;
     private final Semaphore publicCashierSemaphore;
@@ -62,7 +36,6 @@ public class ClientThread extends Thread implements Client {
 
     private final Position position;
     private final Position queuePosition;
-    // TODO: USE WALK ANIMATIONS
     private final WalkPhysics walkPhysics;
     private final int attendantSeconds;
 
@@ -85,7 +58,7 @@ public class ClientThread extends Thread implements Client {
         return attendantSeconds;
     }
 
-    public int getClientId() {
+    public Integer getClientId() {
         return clientId;
     }
 
@@ -117,22 +90,10 @@ public class ClientThread extends Thread implements Client {
     private void exitCashier() {
         walkPhysics.walk(position, position.subtractX(25));
         walkPhysics.walk(position, new Position(1500, 1500));
-
-        if (onFinishCallback != null) {
-            onFinishCallback.handle();
-        }
     }
 
     private void goToQueue() {
-        if (onQueueWayCallback != null) {
-            onQueueWayCallback.handle();
-        }
-
         walkPhysics.walk(position, queuePosition);
-
-        if (onQueueArrivalCallback != null) {
-            onQueueArrivalCallback.handle();
-        }
     }
 
     private void doWork() {

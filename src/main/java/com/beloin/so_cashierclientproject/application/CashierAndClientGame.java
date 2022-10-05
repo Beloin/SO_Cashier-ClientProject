@@ -11,6 +11,7 @@ import com.beloin.so_cashierclientproject.models.plain.Position;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -76,20 +77,22 @@ public class CashierAndClientGame {
         int y = 0;
         for (int i = 0; i < cashierCount; i++) {
             CashierThread cashier = new CashierThread(
-                    new Position(750, y += 100), publicClientsSemaphore,
+                    new Position(750, y += 125), publicClientsSemaphore,
                     publicCashiersSemaphore, clientQueue
             );
 
             CashierImageView cashierImageView = new CashierImageView(cashier, cashierPath);
             positionedList.add(cashierImageView);
 
-            this.root.getChildren().add(cashierImageView.getView());
-
+            Node[] a = cashierImageView.getViewArray();
+            for (Node node : a) {
+                this.root.getChildren().add(node);
+            }
             cashiers.add(cashier);
         }
     }
 
-    public synchronized ClientThread createClient(int attendmentTime) throws FileNotFoundException {
+    public ClientThread createClient(int attendmentTime) throws FileNotFoundException {
         ClientThread client = new ClientThread(
                 clientIdCounter++,
                 new Position(0, 0), queuePosition.getNextPosition(),
@@ -107,7 +110,11 @@ public class CashierAndClientGame {
 
         ClientImageView clientImageView = new ClientImageView(client, clientPath);
         positionedList.add(clientImageView);
-        this.root.getChildren().add(clientImageView.getView());
+
+        Node[] nodes = clientImageView.getViewArray();
+        for (Node node : nodes) {
+            this.root.getChildren().add(node);
+        }
         return client;
     }
 

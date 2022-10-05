@@ -9,8 +9,7 @@ import java.util.Random;
 public class QueuePosition {
     private static final int roomSize = 6 * 4;
     private final static List<Position> spaces = new ArrayList<>(roomSize);
-
-    private Random random = new Random();
+    private final Random random = new Random();
 
     public QueuePosition() {
         for (int i = 0; i < 6; i++) {

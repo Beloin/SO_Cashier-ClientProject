@@ -5,5 +5,6 @@ import com.beloin.so_cashierclientproject.models.plain.Position;
 public interface PositionedView<T> {
     void updatePosition();
     T getView();
+    T[] getViewArray();
     Position getPosition();
 }

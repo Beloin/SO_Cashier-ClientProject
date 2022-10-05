@@ -6,4 +6,6 @@ public interface Client extends PositionedModel {
     void setCashier(Cashier cashier);
     Semaphore getOwnSemaphore();
     int getAttendantSeconds();
+
+    Integer getClientId();
 }

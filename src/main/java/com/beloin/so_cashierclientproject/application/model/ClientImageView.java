@@ -1,8 +1,9 @@
 package com.beloin.so_cashierclientproject.application.model;
 
-import com.beloin.so_cashierclientproject.models.PositionedModel;
+import com.beloin.so_cashierclientproject.models.ClientThread;
 import com.beloin.so_cashierclientproject.models.plain.Position;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -11,18 +12,20 @@ import java.io.FileNotFoundException;
 
 public class ClientImageView implements PositionedView<Node> {
     private final ImageView baseImageView;
-//    private final ImageView legs;
+    private final ClientThread model;
+    private final Label clientId;
 
-    private final PositionedModel client;
-
-    public ClientImageView(PositionedModel client, String resourcePath) throws FileNotFoundException {
-        // TODO: USE SINGLETON IN ORDER TO REUSE IMAGES
+    public ClientImageView(ClientThread client, String resourcePath) throws FileNotFoundException {
         Image baseImage = new Image(new FileInputStream(resourcePath));
         this.baseImageView = new ImageView(baseImage);
-        this.client = client;
+        this.model = client;
 
         this.baseImageView.setX(client.getPosition().getX());
         this.baseImageView.setY(client.getPosition().getY());
+
+        clientId = new Label("ID: " + (client.getClientId() + 1));
+        clientId.setLayoutX(model.getPosition().getX() + 10);
+        clientId.setLayoutY(model.getPosition().getY() - 40);
 
         baseImageView.setPreserveRatio(true);
         baseImageView.setFitHeight(100);
@@ -31,9 +34,12 @@ public class ClientImageView implements PositionedView<Node> {
 
     @Override
     public void updatePosition() {
-        Position p = this.client.getPosition();
+        Position p = this.model.getPosition();
         baseImageView.setX(p.getX());
         baseImageView.setY(p.getY());
+
+        clientId.setLayoutX(model.getPosition().getX() + 10);
+        clientId.setLayoutY(model.getPosition().getY() - 40);
     }
 
     @Override
@@ -42,7 +48,12 @@ public class ClientImageView implements PositionedView<Node> {
     }
 
     @Override
+    public Node[] getViewArray() {
+        return new Node[]{baseImageView, clientId};
+    }
+
+    @Override
     public Position getPosition() {
-        return this.client.getPosition();
+        return this.model.getPosition();
     }
 }

@@ -1,6 +1,5 @@
 package com.beloin.so_cashierclientproject.models;
 
-import com.beloin.so_cashierclientproject.application.model.PositionedView;
 import com.beloin.so_cashierclientproject.models.plain.Position;
 import com.beloin.so_cashierclientproject.physics.HorizontalWalkPhysics;
 import com.beloin.so_cashierclientproject.physics.WalkPhysics;
@@ -8,6 +7,10 @@ import com.beloin.so_cashierclientproject.physics.WalkPhysics;
 import java.util.concurrent.Semaphore;
 
 public class CashierThread extends Thread implements Cashier {
+    public interface Callback {
+        void handle(int nextClientNumber);
+    }
+
 
     public CashierThread(
             Position position,
@@ -34,6 +37,7 @@ public class CashierThread extends Thread implements Cashier {
             publicClientsSemaphore.acquireUninterruptibly();
             Client c = queue.poll();
             c.setCashier(this);
+
             publicCashierSemaphore.release();
             int attSeconds = c.getAttendantSeconds();
             Semaphore clientSemaphore = c.getOwnSemaphore();

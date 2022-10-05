@@ -3,8 +3,6 @@ package com.beloin.so_cashierclientproject.application.utils;
 import com.beloin.so_cashierclientproject.application.model.PositionedView;
 import javafx.scene.Node;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 

@@ -11,18 +11,14 @@ import java.io.FileNotFoundException;
 
 public class CashierImageView implements PositionedView<Node> {
     private final ImageView baseImageView;
-//    private final ImageView legs;
-
     private final PositionedModel model;
 
     public CashierImageView(PositionedModel model, String resourcePath) throws FileNotFoundException {
         Image baseImage = new Image(new FileInputStream(resourcePath));
         this.baseImageView = new ImageView(baseImage);
         this.model = model;
-
         this.baseImageView.setX(model.getPosition().getX());
         this.baseImageView.setY(model.getPosition().getY());
-
         baseImageView.setPreserveRatio(true);
         baseImageView.setFitHeight(100);
         baseImageView.setFitWidth(100);
@@ -38,6 +34,11 @@ public class CashierImageView implements PositionedView<Node> {
     @Override
     public ImageView getView() {
         return baseImageView;
+    }
+
+    @Override
+    public Node[] getViewArray() {
+        return new Node[]{baseImageView};
     }
 
     @Override

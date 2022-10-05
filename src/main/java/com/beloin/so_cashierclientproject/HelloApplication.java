@@ -105,6 +105,7 @@ public class HelloApplication extends Application {
                                 throw new RuntimeException(e);
                             } catch (NumberFormatException e) {
                                 label1.setTextFill(Color.ORANGERED);
+                                label0.setTextFill(Color.ORANGERED);
                             }
                         });
 
